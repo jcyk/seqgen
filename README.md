@@ -1,10 +1,35 @@
 # seqgen
-simple sequence generation framework
+a retrieval-enhanced sequence generation framework 
 
 Source code for our EMNLP19 paper "Retrieval-guided Dialogue Response Generation via a Matching-to-Generation Framework"
 
-
 Our dataset is released [here](https://ai.tencent.com/ailab/nlp/dialogue/) under the name ***Retrieval Generation Chat***.([direct download link](https://ai.tencent.com/ailab/nlp/dialogue/datasets/Retrieval_Generation_Chat.zip))
+
+## Run Demo
+
+`run_demo.sh` with details explained in `deploy.py`. you can query the demo in the following ways:
+
+1. query + retrievals => skeletons + responses
+   http://0.0.0.0:8080/query_retrievals?query=q&retrievals=r1;;;r2;;;r3
+   where q is a single query, r1, r2 and r3 are multiple retrieval responses (also support single retrieval response), seperated by `;;;`.
+
+   return format: {'skeletons':[s1, s2, s3], "responses":[re1, re2, re3]}
+
+2. query + responses => ranks
+   http://0.0.0.0:8080//query_responses?query=q&responses=r1;;;r2;;;r3
+   where q is a single query, r1, r2 and r3 are multiple response candidates seperated by `;;;`.
+
+   return format: {'rank':[ra1, ra2, ra3]} correspond to teh rank of r1, r2, r3 (start from 0)
+
+3. query + skeleton => response
+   http://0.0.0.0:8080/query_skeleton?query=q&skeleton=s
+   where q is a single query, s is a single skeleton, the blanks in the skeleton is indicated by `;;;` , e.g., 今天(today);;;上课(in class);;;表扬(praise);;;.
+
+   return format:  {'respones':r}
+
+Note the demo requires pretrianed neural masker, generator, and ranker. To obtain your own models, please refer to the following instructions.
+
+## Train and Test 
 
 1. Masker
 `ranker/train.sh` and `ranker/another_work.sh`
@@ -15,3 +40,4 @@ Our dataset is released [here](https://ai.tencent.com/ailab/nlp/dialogue/) under
 `ranker/train.sh` and `ranker/work.sh`
 
 Detailed instructions will be added soon.
+

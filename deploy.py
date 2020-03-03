@@ -6,7 +6,7 @@ from flask import Flask, request
 from collections import Counter
 import json
 import numpy as np
-
+import time
 import jieba
 from preprocess_zh import segment_line
 
@@ -120,7 +120,7 @@ def _query_responses_to_skeletons(query, responses):
         skeletons.append(skeleton)
     return skeletons
 
-def _query_responses_to_rank(query, responses):
+def _query_responses_to_rank(query, responses, need_norm_score=False):
     all_d = []
     for response in responses:
         all_d.append([query, response])
@@ -131,22 +131,35 @@ def _query_responses_to_rank(query, responses):
     rank = [0 for i in range(len(scores))]
     for th, pos in enumerate(list(np.argsort(-np.array(scores)))):
         rank[pos] = th
-    return rank
+    if not need_norm_score:
+        return rank
+    score = torch.nn.functional.softmax(torch.FloatTensor(scores), dim=-1).tolist()
+    return rank, score
 
+def read_request(request):
+    form = request.json
+    if not form:
+        if request.method == "POST":
+            form = request.form
+            if not form:
+                form = request.args
+        if request.method == "GET":
+            form = request.args
+    if not form:
+        form = json.loads(request.data)
+    
+    form = dict(form)
+    return form
 
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
 
     @app.route('/query_skeleton', methods=('GET', 'POST'))
     def query_and_skeleton_to_response():
-        print ('!!!!!!!!')
-        if request.method == "POST":
-            form = request.form
-        if request.method == "GET":
-            form = request.args
+        form = read_request(request)
+        print (form)
         query = form['query']
         skeleton = form['skeleton']
-        print (query, skeleton)
         cnt = Counter()
         query = segment_line(' '.join(jieba.cut(query.strip())), v , cnt)
         _skeleton = []
@@ -154,18 +167,18 @@ def create_app():
             piece  = ' '.join(jieba.cut(piece))
             _skeleton.append(segment_line(piece, v, cnt))
         skeleton = ' <BLANK> '.join(_skeleton)
-        query = query.encode('utf8').split()
-        skeleton = skeleton.encode('utf8').split()
+        query = query.split()
+        skeleton = skeleton.split()
         responses = _query_skeletons_to_responses(query, [skeleton])
-        res = json.dumps({"response": responses[0]})
-        return res
+        res = {"response": responses[0]}
+        print (res)
+        print ('------------------------')
+        return json.dumps(res)
 
     @app.route('/query_retrievals', methods=('GET', 'POST'))
     def query_and_retrievals_to_skeletons_and_responses():
-        if request.method == "POST":
-            form = request.form
-        if request.method == "GET":
-            form = request.args
+        form = read_request(request)
+        print (form)
         query = form['query']
         retrievals = form['retrievals']
         cnt = Counter()
@@ -173,20 +186,20 @@ def create_app():
         responses = []
         for piece in retrievals.strip().split(';;;'):
             piece = segment_line(' '.join(jieba.cut(piece)), v, cnt)
-            response = piece.encode('utf8').split()
+            response = piece.split()
             responses.append(response)
-        query = query.encode('utf8').split()
+        query = query.split()
         skeletons = _query_responses_to_skeletons(query, responses)
         responses = _query_skeletons_to_responses(query, [ x.split() for x in skeletons])
-        res = json.dumps({"responses": responses, "skeletons": skeletons})
-        return res
+        res = {"responses": responses, "skeletons": skeletons}
+        print (res)
+        print ('------------------------')
+        return json.dumps(res)
 
     @app.route('/query_responses', methods=('GET', 'POST'))
     def query_and_responses_to_rank():
-        if request.method == "POST":
-            form = request.form
-        if request.method == "GET":
-            form = request.args
+        form = read_request(request)
+        print (form)
         query = form['query']
         _responses = form['responses']
         cnt = Counter()
@@ -194,12 +207,15 @@ def create_app():
         responses = []
         for piece in _responses.strip().split(';;;'):
             piece = segment_line(' '.join(jieba.cut(piece)), v, cnt)
-            response = piece.encode('utf8').split()
+            response = piece.split()
             responses.append(response)
-        query = query.encode('utf8').split()
+        query = query.split()
         rank = _query_responses_to_rank(query, responses)
-        res = json.dumps({"rank": rank})
-        return res
+        res = {"rank": rank}
+        print (res)
+        print ('------------------------')
+        return json.dumps(res)
+
     return app
 if __name__ == "__main__":
-    serve(create_app(), listen='*:8088')
+    serve(create_app(), listen='*:8081', threads=8)
