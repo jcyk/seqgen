@@ -41,3 +41,27 @@ Note the demo requires pretrianed neural masker, generator, and ranker. To obtai
 
 Detailed instructions will be added soon.
 
+## Citation
+
+If you find the code useful, please cite our paper.
+```
+@inproceedings{cai-etal-2019-retrieval,
+    title = "Retrieval-guided Dialogue Response Generation via a Matching-to-Generation Framework",
+    author = "Cai, Deng  and
+      Wang, Yan  and
+      Bi, Wei  and
+      Tu, Zhaopeng  and
+      Liu, Xiaojiang  and
+      Shi, Shuming",
+    booktitle = "Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP)",
+    month = nov,
+    year = "2019",
+    address = "Hong Kong, China",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/D19-1195",
+    doi = "10.18653/v1/D19-1195",
+    pages = "1866--1875",
+}
+```
+## Contact
+For any questions, please drop an email to [Deng Cai](https://jcyk.github.io/).
