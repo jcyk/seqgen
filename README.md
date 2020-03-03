@@ -3,7 +3,9 @@ a retrieval-enhanced sequence generation framework
 
 Source code for our EMNLP19 paper "Retrieval-guided Dialogue Response Generation via a Matching-to-Generation Framework"
 
-Our dataset is released [here](https://ai.tencent.com/ailab/nlp/dialogue/) under the name ***Retrieval Generation Chat***.(direct download link:[Retrieval_Generation_Chat.zip](https://ai.tencent.com/ailab/nlp/dialogue/datasets/Retrieval_Generation_Chat.zip))
+Our dataset is released [here](https://ai.tencent.com/ailab/nlp/dialogue/) under the name **Retrieval Generation Chat**.
+
+download link:[Retrieval_Generation_Chat.zip](https://ai.tencent.com/ailab/nlp/dialogue/datasets/Retrieval_Generation_Chat.zip)
 
 code is tested with **python==3.6.8** and **torch==1.2.0**
 ## Run Demo
