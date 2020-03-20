@@ -32,17 +32,22 @@ code is tested with **python==3.6.8** and **torch==1.2.0**
 
 Note the demo requires pretrianed neural masker, generator, and ranker. To obtain your own models, please refer to the following instructions.
 
+## Prepare Data and Vocab
+1. `preprcess_zh/segment.py --train_file_path train.txt` this will result in a preprocessed data (`train.txt_processed`) file and a vocab file (`vocab`).
+2. In our experiments, we use the same vocab for both query and response sides (i.e., `vocab_src = vocab_tgt = vocab`).
+3. We provide the stopwords list used in our experiments in `data/stopword`
+
 ## Train and Test 
+(You should check every shell scripts for data path config. The default settings in this repo are used in our experiments.)
 
 1. Masker
-`ranker/train.sh` and `ranker/another_work.sh`
+`ranker/train_masker.sh` and `ranker/generate_skeleton.sh`
+
 2. Generator
-`./tain.sh` and `./work.sh` 
+`train.sh` and `work.sh` 
 
 3. Ranker
-`ranker/train.sh` and `ranker/work.sh`
-
-Detailed instructions will be added soon.
+`ranker/train_ranker.sh` and `ranker/score.sh`
 
 ## Citation
 

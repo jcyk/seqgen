@@ -1,7 +1,7 @@
 import torch
 
 from data import Vocab, DataLoader
-
+from masker_ranker import Ranker
 import argparse
 
 def parse_config():
@@ -11,7 +11,7 @@ def parse_config():
     parser.add_argument('--test_data', type=str)
     parser.add_argument('--test_batch_size', type=int)
     parser.add_argument('--output_file', type = str)
-    parser.add_argument('--interaction', action ='store_true')
+
     return parser.parse_args()
 
 if __name__ == "__main__":
@@ -22,10 +22,7 @@ if __name__ == "__main__":
 
     vocab_src = Vocab(model_args.vocab_src, with_SE = False)
     vocab_tgt = Vocab(model_args.vocab_tgt, with_SE = False)
-    if args.interaction:
-        from masker_ranker_interaction import Ranker
-    else:
-        from masker_ranker import Ranker
+
     model = Ranker(vocab_src, vocab_tgt,
                    model_args.embed_dim, model_args.ff_embed_dim,
                    model_args.num_heads, model_args.dropout, model_args.num_layers)

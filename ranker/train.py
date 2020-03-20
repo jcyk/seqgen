@@ -40,8 +40,6 @@ if __name__ == "__main__":
         from ranker import Ranker
     elif args.which_ranker == 'masker_ranker':
         from masker_ranker import Ranker
-    elif args.which_ranker == 'masker_ranker_interaction':
-        from masker_ranker_interaction import Ranker
     model = Ranker(vocab_src, vocab_tgt,
             args.embed_dim, args.ff_embed_dim,
             args.num_heads, args.dropout, args.num_layers)

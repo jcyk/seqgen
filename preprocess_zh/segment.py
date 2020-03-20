@@ -101,12 +101,21 @@ def segment_file(fname, vocab_file, nworkers, lines_per_work):
             if ok:
                 fo.write(line.encode('utf8')+'\n')
 
+import argparse
+def parse_config():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--train_file_path', type=str)
+    return parser.parse_args()
+
 if __name__ == "__main__":
-    where = sys.argv[1]
+    args = parse_config()
+    where = args.train_file_path
     nworkers = 8
     lines_per_work = 200000
-    segment_file(where, '../bigger_golden/vocab_src', nworkers, lines_per_work)
-    exit(0)
+
+    #segment_file(where, '../bigger_golden/vocab_src', nworkers, lines_per_work)
+    #exit(0)
     lines = [ x.decode('utf8') for x in open(where).readlines() ]
     lines, cnt = fast_segment(lines, None, nworkers, lines_per_work)
 

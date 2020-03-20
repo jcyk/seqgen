@@ -42,10 +42,7 @@ def load_Masker(load_path):
     model_args = ckpt['args']
     vocab_src = masker_Vocab("ranker/"+model_args.vocab_src, with_SE = False)
     vocab_tgt = masker_Vocab("ranker/"+model_args.vocab_tgt, with_SE = False)
-    if False:
-        from ranker.masker_ranker_interaction import Ranker
-    else:
-        from ranker.masker_ranker import Ranker
+    from ranker.masker_ranker import Ranker
     model = Ranker(vocab_src, vocab_tgt,
                    model_args.embed_dim, model_args.ff_embed_dim,
                    model_args.num_heads, model_args.dropout, model_args.num_layers)

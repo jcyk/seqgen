@@ -64,7 +64,7 @@ def ListsToTensor(xs, vocab, with_S= False, with_E = False):
 
 def batchify(data, vocab_src, vocab_tgt):
     src = ListsToTensor([x[0] for x in data], vocab_src)
-    tgt = ListsToTensor([x[1] for x in data], vocab_src)
+    tgt = ListsToTensor([x[1] for x in data], vocab_tgt)
     return src, tgt
 
 class DataLoader(object):

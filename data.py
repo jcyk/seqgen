@@ -86,13 +86,12 @@ def batchify(data, vocab_src, vocab_tgt, stop_words, random_mask):
                 random_mask = random.random()
             for x in ref_tgt:
                 if ((x not in stop_words) and (random.random() < random_mask)):
+                    masked_ref_tgt.append(x)
+                else:
                     if random.random() < 0.8:
-                        masked_ref_tgt.append(x)
-                    # 20% words in a skeleon are random tokens
+                        masked_ref_tgt.append(blk)
                     else:
                         masked_ref_tgt.append(vocab_tgt.random_sample())
-                else:
-                    masked_ref_tgt.append(blk)
             # the words in 10% skeleton are in random order
             if random.random() < 0.1:
                 random.shuffle(masked_ref_tgt)
