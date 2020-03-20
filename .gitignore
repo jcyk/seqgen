@@ -104,3 +104,4 @@ venv.bak/
 .mypy_cache/
 *.DS_Store
 masker/*
+ranker/masker_ranker_interaction.py
